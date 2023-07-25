@@ -24,17 +24,19 @@ const Cart = ({ cartItems, setCartItems, products, selectedProducts }) => {
     };
   
     const removeItemFromCart = (productId) => {
-      const updatedItems = cartItemsState.filter((item) => item.id !== productId);
-      setCartItemsState(updatedItems);
-    };
-  
-    const updateItemQuantity = (productId, newQuantity) => {
-      const updatedItems = cartItemsState.map((item) =>
-        item.id === productId ? { ...item, quantity: newQuantity } : item
-      );
-      setCartItemsState(updatedItems);
-    };
+        if (!cartItems || cartItems.length === 0) {
+          return;
+        }
+        const updatedItems = cartItems.filter((item) => item.id !== productId);
+    setCartItems(updatedItems);
+  };
 
+  const updateItemQuantity = (productId, newQuantity) => {
+    const updatedItems = cartItems.map((item) =>
+      item.id === productId ? { ...item, quantity: newQuantity } : item
+    );
+    setCartItems(updatedItems);
+  };
     const calculateTotalPrice = () => {
         // Calculate the total price of all items in the cart
         const totalPrice = cartItems.reduce((total, item) => {
@@ -101,11 +103,11 @@ const Cart = ({ cartItems, setCartItems, products, selectedProducts }) => {
           <h5 className="mb-4">Summary</h5>
           <hr />
           <div className="row">
-            <div className="col" style={{ paddingLeft: 0 }}>
-              ITEMS {cartItems.length}
-            </div>
-            <div className="col text-right">&euro; {calculateTotalPrice()}</div>
-          </div>
+        <div className="col" style={{ paddingLeft: 0 }}>
+          ITEMS {cartItems.length}
+        </div>
+        <div className="col text-right">&euro; {calculateTotalPrice()}</div>
+      </div>
           <form>
             <p>SHIPPING</p>
             <select>

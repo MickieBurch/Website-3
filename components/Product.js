@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
-const Product = ({ addToCart }) => {
+const Product = ({ addToCart, cartItems, setCartItems }) => {
   const [products, setProducts] = useState([]);
   const [visibleProductsCount, setVisibleProductsCount] = useState(6);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -24,15 +24,29 @@ const Product = ({ addToCart }) => {
     element.classList.toggle('truncate');
   };
 
-
-
   const navigate = useNavigate();
 
   const addToCartHandler = (product) => {
-    addToCart(product);
-    setSelectedProducts((prevSelected) => [...prevSelected, product]);
-    console.log('Product added to cart:', product);
-    navigate('/cart'); // Use navigate function to navigate to the cart page
+    // Debugging statement - check the value of cartItems
+    console.log('cartItems:', cartItems);
+  
+    // Check if cartItems is undefined or empty
+    if (!cartItems || cartItems.length === 0) {
+      setCartItems([{ ...product, quantity: 1 }]);
+    } else {
+      const existingItem = cartItems.find((item) => item.id === product.id);
+      if (existingItem) {
+        // If the product is already in the cart, update the quantity
+        const updatedItems = cartItems.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+        setCartItems(updatedItems);
+      } else {
+        // If the product is not in the cart, add it as a new item
+        setCartItems([...cartItems, { ...product, quantity: 1 }]);
+      }
+    }
+    localStorage.setItem('cart', JSON.stringify([...cartItems, { ...product, quantity: 1 }]));
   };
 
   const categories = ["men's clothing", 'jewelery'];
@@ -52,6 +66,7 @@ const Product = ({ addToCart }) => {
     }
     return selectedCategories.includes(product.category);
   });
+
 
   return (
     <div className="container">
@@ -86,16 +101,16 @@ const Product = ({ addToCart }) => {
 
       <div className="row p-4">
         {filteredProducts.slice(0, visibleProductsCount).map((product) => (
-          <div className="col-md-4" key={product.id}>
+            <div className="col-md-4" key={product.id}>
             <div className="card h-100">
               <img className="card-img-top" src={product.image} alt={product.title} style={{ height: '200px', objectFit: 'contain' }} />
               <div className="card-body">
                 <h5 className="card-title">{product.title}</h5>
                 <p className="card-text overflow-hidden truncate">{product.description}</p>
                 <p>${product.price}</p>
-                <button className="btn btn-primary" onClick={() => addToCartHandler(product)}>
-      Add to Cart
-    </button>
+                <button className="btn btn-primary" onClick={addToCartHandler}>
+                  Add to Cart
+                </button>
             </div>
             </div>
           </div>
