@@ -22,6 +22,9 @@ const Nav = () => {
             <li className="nav-item ms-3">
               <a className="nav-link text-black" href="/Contact">Contact</a>
             </li>
+            <li>
+              <a href='/cart'>Cart</a>
+            </li>
           </ul>
         </div>
       </div>
