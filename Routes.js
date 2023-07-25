@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/login';
 import Homepage from './components/homepage';
-import About from './components/About'
+import About from './components/About';
 import Product from './components/Product';
-import Contact from './components/Contact'
-import { Cart } from './components/cart';
+import Contact from './components/Contact';
+import CartPage from './components/CartPage';
 
-const AppRoutes = () => {
+const AppRoutes = ({ cartItems }) => {
   return (
     <Router>
       <Routes>
@@ -16,10 +16,11 @@ const AppRoutes = () => {
         <Route path="/Products" element={<Product />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/Contact" element={<Contact />} />
-        <Route path='/cart' element={<Cart />} />
+        {/* Pass the cartItems prop to the CartPage component */}
+        <Route path="/cart" element={<CartPage cartItems={cartItems} />} />
       </Routes>
     </Router>
   );
-}
+};
 
 export default AppRoutes;

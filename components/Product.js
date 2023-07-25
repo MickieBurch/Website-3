@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Cart } from './cart'
+import { useNavigate } from 'react-router-dom';
 
 const Product = ({ addToCart }) => {
   const [products, setProducts] = useState([]);
@@ -24,10 +24,15 @@ const Product = ({ addToCart }) => {
     element.classList.toggle('truncate');
   };
 
+
+
+  const navigate = useNavigate();
+
   const addToCartHandler = (product) => {
-    addToCart(product); // Call the addToCart function received from props
+    addToCart(product);
     setSelectedProducts((prevSelected) => [...prevSelected, product]);
     console.log('Product added to cart:', product);
+    navigate('/cart'); // Use navigate function to navigate to the cart page
   };
 
   const categories = ["men's clothing", 'jewelery'];
@@ -88,7 +93,9 @@ const Product = ({ addToCart }) => {
                 <h5 className="card-title">{product.title}</h5>
                 <p className="card-text overflow-hidden truncate">{product.description}</p>
                 <p>${product.price}</p>
-                <button className="btn btn-primary" style={{ backgroundColor: "#1E3706" }} onClick={() => addToCartHandler(product)}>Add to Cart</button>
+                <button className="btn btn-primary" onClick={() => addToCartHandler(product)}>
+      Add to Cart
+    </button>
             </div>
             </div>
           </div>
@@ -99,9 +106,6 @@ const Product = ({ addToCart }) => {
           <button className="btn btn-primary" style={{ backgroundColor: "#1E3706" }} onClick={loadMoreProducts}>Load More</button>
         </div>
       )}
-
-      
-   <Cart selectedProducts={selectedProducts} />
     </div>
   );
 };
