@@ -64,29 +64,23 @@ const App = () => {
       return totalPrice.toFixed(2);
     };
 
-  return (
-    <Router>
-      <React.StrictMode>
-        <Nav />
-        <Routes>
-          <Route path='/'
-          element={<Homepage />}>
-          </Route>
-          <Route path='/About'
-          element={<About />}>
-          </Route>
-          <Route path='/Contact'
-          element={<Contact />}>
-          </Route>
-        <Route path="/products" element={<Product products={products} addToCart={addToCart} setCartItems={setCartItems} />} />
-          <Route
-  path="/cart"
-  element={<Cart cartItems={cartItems} setCartItems={setCartItems} products={products} />}
-/>
-        </Routes>
-      </React.StrictMode>
-    </Router>
-  );
-};
-
-export default App;
+    return (
+      <Router>
+        <React.StrictMode>
+          <Nav />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/About" element={<About />} />
+            <Route path="/Contact" element={<Contact />} />
+            <Route
+              path="/products"
+              element={<Product products={products} addToCart={addToCart} cartItems={cartItems} setCartItems={setCartItems} />}
+            />
+            <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems} products={products} />} />
+          </Routes>
+        </React.StrictMode>
+      </Router>
+    );
+  };
+  
+  export default App;

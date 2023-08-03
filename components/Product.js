@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
-const Product = ({ addToCart, cartItems, setCartItems }) => {
+const Product = ({ cartItems, setCartItems }) => {
   const [products, setProducts] = useState([]);
   const [visibleProductsCount, setVisibleProductsCount] = useState(6);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
 
   useEffect(() => {
     fetch('https://fakestoreapi.com/products')
@@ -14,6 +13,10 @@ const Product = ({ addToCart, cartItems, setCartItems }) => {
       .then((data) => setProducts(data))
       .catch((error) => console.log(error));
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const loadMoreProducts = () => {
     setVisibleProductsCount((prevCount) => prevCount + 6);
@@ -27,13 +30,11 @@ const Product = ({ addToCart, cartItems, setCartItems }) => {
   const navigate = useNavigate();
 
   const addToCartHandler = (product) => {
-    // Debugging statement - check the value of cartItems
-    console.log('cartItems:', cartItems);
-  
-    // Check if cartItems is undefined or empty
     if (!cartItems || cartItems.length === 0) {
+      // If cartItems is empty, add the product with quantity 1
       setCartItems([{ ...product, quantity: 1 }]);
     } else {
+      // Check if the product is already in the cart
       const existingItem = cartItems.find((item) => item.id === product.id);
       if (existingItem) {
         // If the product is already in the cart, update the quantity
@@ -42,11 +43,10 @@ const Product = ({ addToCart, cartItems, setCartItems }) => {
         );
         setCartItems(updatedItems);
       } else {
-        // If the product is not in the cart, add it as a new item
+        // If the product is not in the cart, add it as a new item with quantity 1
         setCartItems([...cartItems, { ...product, quantity: 1 }]);
       }
     }
-    localStorage.setItem('cart', JSON.stringify([...cartItems, { ...product, quantity: 1 }]));
   };
 
   const categories = ["men's clothing", 'jewelery'];
@@ -56,7 +56,9 @@ const Product = ({ addToCart, cartItems, setCartItems }) => {
     if (checked) {
       setSelectedCategories((prevCategories) => [...prevCategories, value]);
     } else {
-      setSelectedCategories((prevCategories) => prevCategories.filter((category) => category !== value));
+      setSelectedCategories((prevCategories) =>
+        prevCategories.filter((category) => category !== value)
+      );
     }
   };
 
@@ -66,7 +68,6 @@ const Product = ({ addToCart, cartItems, setCartItems }) => {
     }
     return selectedCategories.includes(product.category);
   });
-
 
   return (
     <div className="container">
