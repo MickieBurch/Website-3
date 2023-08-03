@@ -35,10 +35,7 @@ const App = () => {
       });
     };
   
-    useEffect(() => {
-
-      localStorage.setItem('cart', JSON.stringify(cartItems));
-    }, [cartItems]);
+    
 
     const removeItemFromCart = (productId) => {
       const updatedItems = cartItems.filter((item) => item.id !== productId);

@@ -14,9 +14,6 @@ const Product = ({ cartItems, setCartItems }) => {
       .catch((error) => console.log(error));
   }, []); {/*This is pulling informatino from the API to display*/}
 
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems]);{/*When you select add to cart the use effect is triggered. Once triggered it is taking the object and turning it into a string so local storage can store it under 'cart' */}
 
   const loadMoreProducts = () => {
     setVisibleProductsCount((prevCount) => prevCount + 6);
@@ -47,7 +44,7 @@ const Product = ({ cartItems, setCartItems }) => {
         setCartItems([...cartItems, { ...product, quantity: 1 }]);
       }
     }
-    
+    localStorage.setItem('cart', JSON.stringify(cartItems));
   };
 
 {/* This is setting the category options based on what the API database has the names as. */}
@@ -113,11 +110,11 @@ const Product = ({ cartItems, setCartItems }) => {
                 <h5 className="card-title">{product.title}</h5>
                 <p className="card-text overflow-hidden truncate">{product.description}</p>
                 <p>${product.price}</p>
-            {/* Add button back in later 
-                            <button className="btn btn-primary" onClick={addToCartHandler}>
+            
+                            <button className="btn btn-primary" onClick={addToCartHandler(product)}>
                   Add to Cart
                 </button>
-                */}
+                
             </div>
             </div>
           </div>
