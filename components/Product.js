@@ -12,23 +12,23 @@ const Product = ({ cartItems, setCartItems }) => {
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((error) => console.log(error));
-  }, []);
+  }, []); {/*This is pulling informatino from the API to display*/}
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+  }, [cartItems]);{/*When you select add to cart the use effect is triggered. Once triggered it is taking the object and turning it into a string so local storage can store it under 'cart' */}
 
   const loadMoreProducts = () => {
     setVisibleProductsCount((prevCount) => prevCount + 6);
-  };
+  }; {/*This is telling the arr setVisibleProductCount to only show 6 at a time */}
 
   const handleTextOverflow = (event) => {
     const element = event.target;
     element.classList.toggle('truncate');
-  };
+  };{/*This is calling for a CSS property truncate to prevent text from overflowing past the cards */}
 
-  const navigate = useNavigate();
-
+  
+{/*The add to cart handler is passing product as the data type. What that will do is the function below will then be attached to the string product. */}
   const addToCartHandler = (product) => {
     if (!cartItems || cartItems.length === 0) {
       // If cartItems is empty, add the product with quantity 1
@@ -47,10 +47,13 @@ const Product = ({ cartItems, setCartItems }) => {
         setCartItems([...cartItems, { ...product, quantity: 1 }]);
       }
     }
+    
   };
 
+{/* This is setting the category options based on what the API database has the names as. */}
   const categories = ["men's clothing", 'jewelery'];
 
+{/* handleCategorychange is passing through event. Which will trigger when the event of the checkbox is clicked. It is listening to when the value is checked. If it is checked then it will display the value */}
   const handleCategoryChange = (event) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -62,6 +65,7 @@ const Product = ({ cartItems, setCartItems }) => {
     }
   };
 
+{/* This filer is here to display all of the products if no boxes are selected. */}
   const filteredProducts = products.filter((product) => {
     if (selectedCategories.length === 0) {
       return true; // Show all products if no category is selected
@@ -109,9 +113,11 @@ const Product = ({ cartItems, setCartItems }) => {
                 <h5 className="card-title">{product.title}</h5>
                 <p className="card-text overflow-hidden truncate">{product.description}</p>
                 <p>${product.price}</p>
-                <button className="btn btn-primary" onClick={addToCartHandler}>
+            {/* Add button back in later 
+                            <button className="btn btn-primary" onClick={addToCartHandler}>
                   Add to Cart
                 </button>
+                */}
             </div>
             </div>
           </div>
